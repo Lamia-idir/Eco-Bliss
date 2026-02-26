@@ -37,104 +37,59 @@ it("Stock > 0 : bouton Ajouter activé", () => {
   })
 })
 
-it("Vérifier l'ajout de produit au panier", () => {
-
-  cy.request("GET", "http://localhost:8081/products").then((res) => {
-
-    expect(res.status).to.eq(200)
-
-    // Même variable que les autres tests
-    const product = res.body.find(p => Number(p.availableStock) > 0)
-    expect(product).to.exist
-
-    const stockAvant = Number(product.availableStock)
-
-    //  Aller sur la page produit ---
-    cy.intercept("GET", `**/products/${product.id}`).as("getProduct")
-    cy.visit(`http://localhost:8080/#/products/${product.id}`)
-    cy.wait("@getProduct")
-
-    //  Vérifier bouton actif ---
-    cy.get('[data-cy="detail-product-add"]')
-      .should('be.visible')
-      .and('not.be.disabled')
-
-    //  Ajouter au panier ---
-    cy.intercept("PUT", "**/orders/add").as("addToCart")
-
-    cy.get('[data-cy="detail-product-add"]').click()
-
-    cy.wait("@addToCart")
-      .its("response.statusCode")
-      .should("be.oneOf", [200, 201, 204])
-
-    //  Vérifier panier ---
-    cy.get('[data-cy="nav-link-cart"]').click()
-    cy.location("hash").should("eq", "#/cart")
-
-    cy.get('[data-cy="cart-line-quantity"]')
-      .first()
-      .should('exist')
-      .and('be.visible')
-    //  Vérifier stock décrémenté ---
-    cy.request("GET", `http://localhost:8081/products/${product.id}`)
-      .then((res2) => {
-
-        const stockApres = Number(res2.body.availableStock)
-        expect(stockApres).to.eq(stockAvant - 1)
-
-      })
-
-  })
-
-})
-
-
-
-
 // it("Vérifier l'ajout de produit au panier", () => {
 
-//   cy.getProductWithStock(1).then(({ productId, stockAvant }) => {
+//   cy.request("GET", "http://localhost:8081/products").then((res) => {
 
-    // --- 2) Aller sur la page produit ---
-    // cy.intercept("GET", `**/products/${productId}`).as("getProduct")
-    // cy.visit(`http://localhost:8080/#/products/${productId}`)
-    // cy.wait("@getProduct")
+//     expect(res.status).to.eq(200)
 
-    // --- 3) Cliquer sur ajouter ---
-    // cy.intercept("PUT", "**/orders/add").as("addToCart")
+    
+//     const product = res.body.find(p => Number(p.availableStock) > 0)
+//     expect(product).to.exist
 
-    // cy.get('[data-cy="detail-product-add"]')
-    //   .should("be.visible")
-    //   .and("not.be.disabled")
-    //   .click()
+//     const stockAvant = Number(product.availableStock)
 
-    // cy.wait("@addToCart", { timeout: 20000 })
-    //   .its("response.statusCode")
-    //   .should("be.oneOf", [200, 201, 204])
+  
+//     cy.intercept("GET", `**/products/${product.id}`).as("getProduct")
+//     cy.visit(`http://localhost:8080/#/products/${product.id}`)
+//     cy.wait("@getProduct")
 
-    // --- 4) Vérifier panier ---
-    // cy.get('[data-cy="nav-link-cart"]').click()
-    // cy.location("hash").should("eq", "#/cart")
 
-    // cy.get('[data-cy="cart-line-quantity"]')
-    //   .first()
-    //   .should('exist')
-    //   .and('be.visible')
-    //   .and('have.value', '1')
+    
+//     cy.get('[data-cy="detail-product-add"]')
+//       .should('be.visible')
+//       .and('not.be.disabled')
 
-    // cy.go('back')
+   
+//     cy.intercept("PUT", "**/orders/add").as("addToCart")
 
-    // --- 5) Vérifier stock décrémenté ---
-//     cy.request("GET", `http://localhost:8081/products/${productId}`)
+//     cy.get('[data-cy="detail-product-add"]').click()
+
+//     cy.wait("@addToCart")
+//       .its("response.statusCode")
+//       .should("be.oneOf", [200, 201, 204])
+
+   
+//     cy.get('[data-cy="nav-link-cart"]').click()
+//     cy.location("hash").should("eq", "#/cart")
+
+//     cy.get('[data-cy="cart-line-quantity"]')
+//       .first()
+//       .should('exist')
+//       .and('be.visible')
+   
+//     cy.request("GET", `http://localhost:8081/products/${product.id}`)
 //       .then((res2) => {
+
 //         const stockApres = Number(res2.body.availableStock)
 //         expect(stockApres).to.eq(stockAvant - 1)
+
 //       })
 
 //   })
 
 // })
+
 
 it("Limite - refuse une quantité négative", () => {
   cy.url().should("eq", "http://localhost:8080/#/")
@@ -270,6 +225,56 @@ cy.get('[data-cy="nav-link-products"]')
         expect(stockAfter).to.be.a("number")
         expect(stockAfter).to.equal(stockBefore - 1)
       })
+  })
+})
+
+
+
+it("Ajouter au panier + vérifier via API", () => {
+
+  //  Se connecter via API
+  cy.fixture("user").then((user) => {
+    cy.request("POST", "http://localhost:8081/login", {
+      username: user.username,
+      password: user.password,
+    }).then((loginRes) => {
+
+      const token = loginRes.body.token
+
+      //  Aller sur un produit
+      cy.get('[data-cy="nav-link-products"]').click()
+      cy.get('[data-cy="product-link"]').first().click()
+
+      //  Cliquer sur Ajouter au panier
+
+      cy.intercept("PUT", "http://localhost:8081/orders/add").as("addToCart")
+
+      cy.get('[data-cy="detail-product-name"]')
+      .should("exist")
+      .and("be.visible")
+       .and("not.be.empty")
+      cy.get('[data-cy="detail-product-add"]')
+      .should("be.visible")
+      .and("not.be.disabled")
+    
+      .click()
+    
+     cy.wait("@addToCart",)
+      //  Vérifier via API que le panier contient au moins 1 produit
+      cy.request({
+        method: "GET",
+        url: "http://localhost:8081/orders",
+        headers: { Authorization: `Bearer ${token}` }
+      }).then((res) => {
+
+        expect(res.status).to.eq(200)
+
+        // Vérifie que le panier n'est pas vide
+        expect(res.body.orderLines.length).to.be.greaterThan(0)
+
+      })
+
+    })
   })
 })
 

@@ -25,3 +25,72 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+# Projet de Tests – Application Eco-Bliss
+
+## Objectif
+
+Ce projet a pour objectif de tester une application e-commerce composée :
+
+- d’un frontend accessible sur : http://localhost:4200
+- d’un backend API lancé via Docker Compose : http://localhost:8081
+- de tests automatisés réalisés avec Cypress
+
+Les tests couvrent :
+
+- Tests API (authentification, produits, panier)
+- Tests UI (connexion, ajout au panier)
+- Tests de sécurité (XSS)
+- Tests de gestion d’erreurs (stock, authentification)
+
+# Installation du projet
+
+## Cloner le repository
+
+git clone < https://github.com/Lamia-idir/Eco-Bliss.git >
+
+# Lancer le Backend avec Docker Compose
+
+## Démarrer le backend
+
+docker compose up -d
+Le backend sera accessible sur : http://localhost:8081
+
+# Lancer le Frontend : npm run start:
+
+Le frontend sera accessible sur : http://localhost:4200
+
+# Exécution des tests Cypress
+
+## Mode interface graphique : npx cypress open, puis sélectionner **E2E Testing**.
+
+## Mode ligne de commande : npx cypress run
+
+# Configuration et génération du rapport (Mochawesome)
+
+## Installation
+
+npm install --save-dev mochawesome mochawesome-merge mochawesome-report-generator
+
+# Exécution des tests avec rapport
+
+npm run test:report
+
+# Génération de rapport HTML
+
+npm run report:generate
+
+# Génération du rapport de tests
+
+Si Mochawesome est configuré :
+
+## Lancer les tests avec reporter
+
+npx cypress run --reporter mochawesome
+
+## Générer le rapport HTML
+
+npx mochawesome-merge cypress/reports/\*.json > report.json
+npx marge report.json
+Le rapport sera disponible dans le dossier :
+/mochawesome-report
