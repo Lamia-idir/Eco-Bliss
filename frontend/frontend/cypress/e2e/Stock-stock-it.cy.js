@@ -37,60 +37,6 @@ it("Stock > 0 : bouton Ajouter activé", () => {
   })
 })
 
-// it("Vérifier l'ajout de produit au panier", () => {
-
-//   cy.request("GET", "http://localhost:8081/products").then((res) => {
-
-//     expect(res.status).to.eq(200)
-
-    
-//     const product = res.body.find(p => Number(p.availableStock) > 0)
-//     expect(product).to.exist
-
-//     const stockAvant = Number(product.availableStock)
-
-  
-//     cy.intercept("GET", `**/products/${product.id}`).as("getProduct")
-//     cy.visit(`http://localhost:8080/#/products/${product.id}`)
-//     cy.wait("@getProduct")
-
-
-    
-//     cy.get('[data-cy="detail-product-add"]')
-//       .should('be.visible')
-//       .and('not.be.disabled')
-
-   
-//     cy.intercept("PUT", "**/orders/add").as("addToCart")
-
-//     cy.get('[data-cy="detail-product-add"]').click()
-
-//     cy.wait("@addToCart")
-//       .its("response.statusCode")
-//       .should("be.oneOf", [200, 201, 204])
-
-   
-//     cy.get('[data-cy="nav-link-cart"]').click()
-//     cy.location("hash").should("eq", "#/cart")
-
-//     cy.get('[data-cy="cart-line-quantity"]')
-//       .first()
-//       .should('exist')
-//       .and('be.visible')
-   
-//     cy.request("GET", `http://localhost:8081/products/${product.id}`)
-//       .then((res2) => {
-
-//         const stockApres = Number(res2.body.availableStock)
-//         expect(stockApres).to.eq(stockAvant - 1)
-
-//       })
-
-//   })
-
-// })
-
-
 it("Limite - refuse une quantité négative", () => {
   cy.url().should("eq", "http://localhost:4200/#/")
 

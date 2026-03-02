@@ -4,12 +4,12 @@ describe('Smoke - Boutons Ajouter au panier', () => {
 
     cy.visit('http://localhost:4200')
 
-    // 🔹 Aller sur la page login
+    //  Aller sur la page login
     cy.get('[data-cy="nav-link-login"]')
       .should('be.visible')
       .click()
 
-    // 🔹 Attendre chargement login
+    //  Attendre chargement login
     cy.get('[data-cy="login-input-username"]', { timeout: 10000 })
       .should('be.visible')
         cy.get('[data-cy="login-input-password"]')
@@ -23,14 +23,11 @@ describe('Smoke - Boutons Ajouter au panier', () => {
 
 })
 
-    // 🔹 Vérifier que la connexion est réussie
+    //  Vérifier que la connexion est réussie
     cy.get('[data-cy="nav-link-cart"]', { timeout: 10000 })
       .should('be.visible')
       cy.url().should('eq', 'http://localhost:8080/#/')
       cy.contains('Déconnexion').should('be.visible')
-
-
-
 
   })
 
