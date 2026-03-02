@@ -2,7 +2,7 @@ describe('Smoke - Boutons Ajouter au panier', () => {
 
   it('Vérifie la présence des boutons Ajouter au panier quand connecté', () => {
 
-    cy.visit('http://localhost:8080')
+    cy.visit('http://localhost:4200')
 
     // 🔹 Aller sur la page login
     cy.get('[data-cy="nav-link-login"]')
@@ -12,6 +12,8 @@ describe('Smoke - Boutons Ajouter au panier', () => {
     // 🔹 Attendre chargement login
     cy.get('[data-cy="login-input-username"]', { timeout: 10000 })
       .should('be.visible')
+        cy.get('[data-cy="login-input-password"]')
+    .should('be.visible')
 
     cy.fixture('user').then((user) => {
 

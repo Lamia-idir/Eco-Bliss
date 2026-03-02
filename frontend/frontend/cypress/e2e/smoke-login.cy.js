@@ -2,7 +2,7 @@ describe('Smoke Test - Connexion', () => {
 
  it(' Présence des champs et boutons de connexion', () => {
 
-  cy.visit('http://localhost:8080')
+  cy.visit('http://localhost:4200')
 
   cy.get('[data-cy="nav-link-login"]')
     .should('be.visible')

@@ -13,8 +13,6 @@ it("Login OK", () => {
     });
   });
 });
-
-
 it("Login KO - mauvais mot de passe", () => {
   cy.fixture("user").then((user) => {
 

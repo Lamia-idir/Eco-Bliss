@@ -2,7 +2,7 @@ describe('Smoke - Boutons Ajouter au panier', () => {
 
   it('Vérifie la présence des boutons Ajouter au panier quand connecté', () => {
 
-    cy.visit('http://localhost:8080')
+    cy.visit('http://localhost:4200')
 
   
     // 🔹 Vérifier présence boutons Ajouter au panier

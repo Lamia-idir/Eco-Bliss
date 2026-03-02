@@ -1,5 +1,5 @@
 it("Ajoute au panier un produit avec stock > 1 (choix via API + clic UI)", () => {
-  cy.visit("http://localhost:8080")
+  cy.visit("http://localhost:4200")
 
   // Login UI
   cy.get('[data-cy="nav-link-login"]').click()
