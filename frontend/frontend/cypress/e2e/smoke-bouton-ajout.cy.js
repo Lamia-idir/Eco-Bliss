@@ -2,9 +2,7 @@ describe('Smoke - Boutons Ajouter au panier', () => {
 
   it('Vérifie la présence des boutons Ajouter au panier quand connecté', () => {
 
-    cy.visit('http://localhost:4200')
-
-  
+  cy.visit('/')
     // 🔹 Vérifier présence boutons Ajouter au panier
   cy.get('[data-cy="nav-link-products"]')
       .should('exist')
@@ -17,9 +15,11 @@ describe('Smoke - Boutons Ajouter au panier', () => {
     cy.get('[data-cy="product-link"]')
       .first()
       .click()
+      
 
 cy.get('[data-cy="detail-product-add"]')
   .should('be.visible')
+   .scrollIntoView()
   .and('contain', 'Ajouter au panier')
 
 
