@@ -18,8 +18,11 @@ function testerQuantite(qty) {
     .clear()
     .type(qty)
 
-  cy.get('[data-cy="detail-product-add"]').click()
+  cy.get('[data-cy="detail-product-add"]')
   .should("be.visible")
+  .and("contain", "Ajouter au panier")
+  .click()
+
 
   cy.get("@addToCart.all").should("have.length", 0)
 }

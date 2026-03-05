@@ -6,7 +6,7 @@ describe("Tester l'ajout au panier (UI + vérification API)", () => {
     cy.loginUI()
   })
 
-  it("UI - Ajouter au panier + vérifier via API", () => {
+  it(" Ajouter au panier + vérifier via API", () => {
     cy.loginApi().then((token) => {
 
       cy.get('[data-cy="nav-link-products"]').click()
